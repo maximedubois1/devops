@@ -4,6 +4,8 @@
 
 ### Database
 
+1-1 Document your database container essentials: commands and Dockerfile.
+
 ``` Dockerfile
 #l'image de base
 FROM postgres:14.1-alpine
@@ -30,17 +32,13 @@ sudo docker run -d --network app-network --name adminer -p 8080:8080 adminer
 ```
 
 Pour ce connecter à adminer à l'adress http://localhost:8080
-
+```
 System	: PostgreSQL
-
-Server	: 172.18.0.2  //trouver grace à docker inspect post
-
+Server	: 172.18.0.2  //trouver grace à docker inspect post changer ensuite par le nom du container
 Username : usr
-
 Password : pwd 
-
 Database : db
-
+```
 
 ### BackendAPI
 
@@ -89,8 +87,8 @@ docker run -dit --network app-network --name http -p 8080:80 http
 ```
 <VirtualHost *:80>
 ProxyPreserveHost On
-ProxyPass / http://172.18.0.3:8080/
-ProxyPassReverse / http://172.18.0.3:8080/
+ProxyPass / http://back:8080/
+ProxyPassReverse / http://back:8080/
 </VirtualHost>
 LoadModule proxy_module modules/mod_proxy.so
 LoadModule proxy_http_module modules/mod_proxy_http.so
@@ -112,14 +110,14 @@ Why is docker-compose so important?
 Docker compose permet de gerer plusieurs container avec une seule commande avec toute leurs configuration nécéssaire
 
 1-3 Document docker-compose most important commands.
-```
+```sh
 docker-compose up -d --force-recreate // démarre la stack
-docker-compose down // arrete la stack
+docker-compose down -v // arrete la stack et supprimer tous les volumes et les networks
 ```
  1-4 Document your docker-compose file.
 
- ```docker-compose.yml
-version: '3.7'  #version de docker compose à utilisé
+ ```yml
+version: '3.8'  #version de docker compose à utiliser
 
 services:
     backend:  #pour le container backend
@@ -157,6 +155,19 @@ networks:
     my-network: #on déclare le network utilisé
 ```
 
+docker-compose.override.yml
+```yml
+version: '3.8'
+
+services:
+    adminer:
+      container_name: adminer
+      image: adminer
+      ports:
+        - 8093:8080
+      networks:
+          - my-network
+```
 
 1-5 Document your publication commands and published images in dockerhub.
 
