@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+    backend:
+        container_name: back
+        build: BackendAPI/simple-api-student
+        networks:
+          - my-network
+        depends_on:
+          - database
+        env_file:
+          - database.env
+  
+    database:
+        container_name: database
+        build: database
+        networks:
+          - my-network
+        env_file:
+          - database.env
+        volumes:
+          - /tmp/postgresql1/data:/var/lib/postgresql/data
+
+    httpd:
+        container_name: front
+        build: Front
+        ports:
+          - 80:80
+        networks:
+          - my-network
+        depends_on:
+          - database
+          - backend
+
+networks:
+    my-network:
