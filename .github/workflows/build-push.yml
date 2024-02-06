@@ -29,12 +29,12 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ${{env.databasedir}}
-          tags:  ${{secrets.DOCKER_HUB_USERNAME}}/tp-devops-simple-api:latest
+          tags:  ${{secrets.DOCKER_HUB_USERNAME}}/database:latest
           push: ${{ github.ref == 'refs/heads/main' }}
 
       - name: Build image and push httpd
         uses: docker/build-push-action@v3
         with:
           context: ${{env.frontdir}}
-          tags:  ${{secrets.DOCKER_HUB_USERNAME}}/tp-devops-simple-api:latest
+          tags:  ${{secrets.DOCKER_HUB_USERNAME}}/front:latest
           push: ${{ github.ref == 'refs/heads/main' }}
