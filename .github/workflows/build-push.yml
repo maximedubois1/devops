@@ -1,12 +1,11 @@
 name: Build push
 on:
-    workflow_run:
-        workflows: ["CI devops 2023"]
-        types:
-            - completed            
+  workflow_run:
+    workflows: ["CI devops 2023"]
+    types:
+        - completed                
 jobs:
   build-and-push-docker-image:
-    needs: test-backend
     runs-on: ubuntu-22.04
     env:
       backdir: ./TP/Part_01/BackendAPI/simple-api-student
