@@ -11,7 +11,7 @@ jobs:
   test-backend: 
     runs-on: ubuntu-22.04
     env:
-      working-directory: ./TP/Part_01/BackendAPI/simple-api-student
+      working-directory: TP/Part_01/BackendAPI/simple-api-student
     steps:
      #checkout your github code using actions/checkout@v2.5.0
       - uses: actions/checkout@v2.5.0
