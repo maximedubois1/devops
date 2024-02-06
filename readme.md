@@ -221,6 +221,12 @@ jobs:
         working-directory: ${{env.working-directory}} #on met à jour le repertoire d'exécution
 ```
 
+Document your quality gate configuration.
+```
+run: mvn -B verify sonar:sonar -Dsonar.projectKey=maximedubois1_simple-api -Dsonar.organization=maximedubois1 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}  --file ./pom.xml
+working-directory: ${{env.working-directory}}
+```
+J'ai modifier les différentes information lié à mon projet et mon orga sonar et j'ai modifier le chemin du fichier pom.xml, et ajouter le tocker à github
 
 
 main.yml
