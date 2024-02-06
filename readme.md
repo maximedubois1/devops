@@ -182,3 +182,35 @@ docker push maximedubois1cpe/madatabase:1.0 # on push l'image sur docker hub
 Why do we put our images into an online repo?
 
 Pour que ces images soit accessible n'importe ou dans le monde
+
+
+# TP2
+
+2-1 What are testcontainers?
+Ce sont des bibliothèque java qui permet l'exécution des tests dans des docker
+
+```yml
+name: CI devops 2023
+on:
+  #to begin you want to launch this job in main and develop
+  push:
+    branches: 
+      - main
+      - develop
+  pull_request:
+
+jobs:
+  test-backend: 
+    runs-on: ubuntu-22.04
+    steps:
+     #checkout your github code using actions/checkout@v2.5.0
+      - uses: actions/checkout@v2.5.0
+
+     #do the same with another action (actions/setup-java@v3) that enable to setup jdk 17
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+
+     #finally build your app with the latest command
+      - name: Build and test with Maven
+        run: mvn clean verify
+```
