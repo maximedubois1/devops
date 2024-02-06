@@ -189,28 +189,34 @@ Pour que ces images soit accessible n'importe ou dans le monde
 2-1 What are testcontainers?
 Ce sont des bibliothèque java qui permet l'exécution des tests dans des docker
 
+2-2 Document your Github Actions configurations.
 ```yml
 name: CI devops 2023
 on:
-  #to begin you want to launch this job in main and develop
   push:
-    branches: 
+    branches: #list des branches qui déclanches un event
       - main
       - develop
   pull_request:
 
 jobs:
   test-backend: 
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-22.04 #sur ubuntu 22.04
+    env: #on déclare des varaibles d'environnement
+      working-directory: ./TP/Part_01/BackendAPI/simple-api-student
     steps:
      #checkout your github code using actions/checkout@v2.5.0
-      - uses: actions/checkout@v2.5.0
+      - uses: actions/checkout@v2.5.0  #on checkout sur la bonne branch et le bon commit
 
      #do the same with another action (actions/setup-java@v3) that enable to setup jdk 17
-      - name: Set up JDK 17
+      - name: Set up JDK 17 #mise en place de JDK17 avec sa distribution et sa version
         uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '17'
 
      #finally build your app with the latest command
       - name: Build and test with Maven
-        run: mvn clean verify
+        run: mvn clean verify  #et la commande à exécuter pour les test
+        working-directory: ${{env.working-directory}} #on met à jour le repertoire d'exécution
 ```
