@@ -220,3 +220,84 @@ jobs:
         run: mvn clean verify  #et la commande à exécuter pour les test
         working-directory: ${{env.working-directory}} #on met à jour le repertoire d'exécution
 ```
+
+
+
+main.yml
+```yml
+name: CI devops 2023
+on:
+  #to begin you want to launch this job in main and develop
+  push:
+    branches: 
+      - main
+      - develop
+  pull_request:
+
+jobs:
+  test-backend: 
+    runs-on: ubuntu-22.04
+    env:
+      working-directory: ./TP/Part_01/BackendAPI/simple-api-student
+    steps:
+     #checkout your github code using actions/checkout@v2.5.0
+      - uses: actions/checkout@v2.5.0
+
+     #do the same with another action (actions/setup-java@v3) that enable to setup jdk 17
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+     #finally build your app with the latest command
+      - name: Build and test with Maven
+        #run: mvn clean verify
+        run: mvn -B verify sonar:sonar -Dsonar.projectKey=maximedubois1_simple-api -Dsonar.organization=maximedubois1 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}  --file ./pom.xml
+        working-directory: ${{env.working-directory}}
+
+```
+
+build-push.yml
+```yml
+name: Build push
+on:
+  workflow_run:
+    workflows: ["CI devops 2023"]
+    types:
+        - completed                
+jobs:
+  build-and-push-docker-image:
+    runs-on: ubuntu-22.04
+    env:
+      backdir: ./TP/Part_01/BackendAPI/simple-api-student
+      databasedir: ./TP/Part_01/database
+      frontdir: ./TP/Part_01/Front
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2.5.0
+
+      - name : Login to DockerHub
+        run: docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      - name: Build image and push backend
+        uses: docker/build-push-action@v3
+        with:
+          context: ${{env.backdir}}
+          tags:  ${{secrets.DOCKER_HUB_USERNAME}}/tp-devops-simple-api:latest
+          push: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build image and push database
+        uses: docker/build-push-action@v3
+        with:
+          context: ${{env.databasedir}}
+          tags:  ${{secrets.DOCKER_HUB_USERNAME}}/database:latest
+          push: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build image and push httpd
+        uses: docker/build-push-action@v3
+        with:
+          context: ${{env.frontdir}}
+          tags:  ${{secrets.DOCKER_HUB_USERNAME}}/front:latest
+          push: ${{ github.ref == 'refs/heads/main' }}
+```
