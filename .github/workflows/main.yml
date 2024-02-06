@@ -57,7 +57,7 @@ jobs:
           # relative path to the place where source code with Dockerfile is located
           context: ${{env.databasedir}}
           # Note: tags has to be all lower-case
-          tags:  ${{secrets.DOCKER_HUB_USERNAME}}/tp-devops-simple-api:latest
+          tags:  ${{secrets.DOCKER_HUB_USERNAME}}/database:latest
           push: ${{ github.ref == 'refs/heads/main' }}
 
       - name: Build image and push httpd
@@ -66,6 +66,6 @@ jobs:
           # relative path to the place where source code with Dockerfile is located
           context: ${{env.frontdir}}
           # Note: tags has to be all lower-case
-          tags:  ${{secrets.DOCKER_HUB_USERNAME}}/tp-devops-simple-api:latest
+          tags:  ${{secrets.DOCKER_HUB_USERNAME}}/front:latest
           push: ${{ github.ref == 'refs/heads/main' }}
 
