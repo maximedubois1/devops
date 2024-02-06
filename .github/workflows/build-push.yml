@@ -3,9 +3,10 @@ on:
   workflow_run:
     workflows: ["CI devops 2023"]
     types:
-        - completed                
+        - completed   
 jobs:
   build-and-push-docker-image:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-22.04
     env:
       backdir: ./TP/Part_01/BackendAPI/simple-api-student
