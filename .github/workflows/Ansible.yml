@@ -1,7 +1,7 @@
 name: Deploy with Ansible to aws
 on:
   workflow_run:
-    workflows: ["Build and Push"]
+    workflows: ["Build push"]
     types: [completed]
     branches:
       - 'main'
