@@ -28,7 +28,7 @@ jobs:
           # Optional, SSH private key
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           # Optional, literal inventory file contents
-          # inventory: |
-          #   [all]
-          #   damien.mailhebiau.takima.cloud
-          inventory: ${{ secrets.ANSIBLE_INVENTORY }}
+          inventory: |
+            [all]
+            maxime.dubois.1.takima.cloud
+          #inventory: ${{ secrets.ANSIBLE_INVENTORY }}
