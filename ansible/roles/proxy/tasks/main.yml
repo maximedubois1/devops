@@ -1,0 +1,12 @@
+---
+# tasks file for roles/proxy
+- name: Create Proxy container
+  community.docker.docker_container:
+    name: httpd
+    image: maximedubois1cpe/proxy:latest
+    networks:
+      - name: app-network
+    ports:
+      - 80:80
+    recreate: true
+    pull: true
