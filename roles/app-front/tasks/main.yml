@@ -3,6 +3,6 @@
 - name: Creatde FRONT container
   community.docker.docker_container:
     name: www
-    image: maximedubois1cpe/front:latest
+    image: maximedubois1cpe/frontend:latest
     networks:
       - name: app-network
