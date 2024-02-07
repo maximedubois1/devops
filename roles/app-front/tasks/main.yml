@@ -6,3 +6,5 @@
     image: maximedubois1cpe/frontend:latest
     networks:
       - name: app-network
+    recreate: true
+    pull: true

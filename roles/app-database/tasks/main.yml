@@ -9,3 +9,5 @@
     networks:
       - name: app-network
     env_file: /tmp/.env
+    recreate: true
+    pull: true
