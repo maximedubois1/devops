@@ -11,7 +11,8 @@ jobs:
     env:
       backdir: ./TP/Part_01/BackendAPI/simple-api-student
       databasedir: ./TP/Part_01/database
-      frontdir: ./TP/Part_01/Front
+      httpddir: ./TP/Part_01/Front
+      frontdir: ./TP/Part_01/Front/devops-front-main
     steps:
       - name: Checkout code
         uses: actions/checkout@v2.5.0
@@ -34,6 +35,13 @@ jobs:
           push: ${{ github.ref == 'refs/heads/main' }}
 
       - name: Build image and push httpd
+        uses: docker/build-push-action@v3
+        with:
+          context: ${{env.httpddir}}
+          tags:  ${{secrets.DOCKER_HUB_USERNAME}}/proxy:latest
+          push: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build image and push front
         uses: docker/build-push-action@v3
         with:
           context: ${{env.frontdir}}

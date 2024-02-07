@@ -6,5 +6,3 @@
     image: maximedubois1cpe/front:latest
     networks:
       - name: app-network
-    ports:
-      - "80:80"
