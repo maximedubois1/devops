@@ -308,3 +308,148 @@ jobs:
           tags:  ${{secrets.DOCKER_HUB_USERNAME}}/front:latest
           push: ${{ github.ref == 'refs/heads/main' }}
 ```
+
+# TP3 Ansible
+
+## TD
+
+```
+maxime.dubois.1@tpc18:~/Documents/devops$ ansible all -m ping -i ./ansible/hosts -u centos --private-key=~/Documents/id_rsa
+maxime.dubois.1.takima.cloud | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+```
+
+## TP
+
+3-1 Document your inventory and base commands
+
+```yml
+all: # on créer le group all
+  vars: #on définit des varibales
+    ansible_user: centos #nom d'utilisateur utilisé par ansible
+    ansible_ssh_private_key_file: ~/Documents/id_rsa # clé privé utilisé pour ce connecter
+  children:
+    prod: # on créer le group prod
+      hosts: maxime.dubois.1.takima.cloud #on déclare les hots de ce groupe
+```
+
+3-2 Document your playbook
+```yml
+# on choisi les cibles
+- hosts: all
+  gather_facts: false
+  become: true
+
+# Install Docker
+  tasks:
+
+  - name: Install device-mapper-persistent-data
+    yum: #avec le module yum
+      name: device-mapper-persistent-data #on install ce programme
+      state: latest #a la dernière version
+
+  - name: Install lvm2
+    yum:
+      name: lvm2
+      state: latest
+
+  - name: add repo docker
+    command: #Avec le module commande
+      cmd: sudo yum-config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo #on execute cette commande
+
+  - name: Install Docker
+    yum:
+      name: docker-ce
+      state: present
+
+  - name: Install python3
+    yum:
+      name: python3
+      state: present
+
+  - name: Install docker with Python 3
+    pip: #Avec le module pip
+      name: docker
+      executable: pip3
+    vars: #on ajoute des variables
+      ansible_python_interpreter: /usr/bin/python3
+
+  - name: Make sure Docker is running
+    service: name=docker state=started
+    tags: docker
+```
+
+
+role back
+```yml
+# tasks file for roles/app-back
+- name: Create BACK container
+  community.docker.docker_container:
+    name: back
+    image: maximedubois1cpe/tp-devops-simple-api:latest
+    networks:
+      - name: app-network
+    env_file: /tmp/.env  #je récupere le fichier .env copier par le role env
+
+```
+
+role Database
+```yml
+---
+# tasks file for roles/app-database
+- name: Create DATABASE container
+  community.docker.docker_container:
+    name: database
+    image: maximedubois1cpe/database:latest
+    volumes:
+      - data:/var/lib/postgresql/data
+    networks:
+      - name: app-network
+    env_file: /tmp/.env
+
+```
+
+role network
+```yml
+
+---
+# tasks file for roles/network
+- name: Create Network
+  community.docker.docker_network:
+    name: app-network
+
+```
+
+role env
+```yml
+---
+# tasks file for roles/env
+- name: Copier le fichier .env vers la machine cible
+  ansible.builtin.copy:
+    src: ../../.env
+    dest: /tmp/.env
+
+
+```
+
+role front
+```yml
+---
+# tasks file for roles/app-front
+- name: Creatde FRONT container
+  community.docker.docker_container:
+    name: httpd
+    image: maximedubois1cpe/front:latest
+    networks:
+      - name: app-network
+    ports: #on expose le port 80
+      - "80:80"
+
+```
+
+

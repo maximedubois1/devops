@@ -1,0 +1,6 @@
+---
+# tasks file for roles/env
+- name: Copier le fichier .env vers la machine cible
+  ansible.builtin.copy:
+    src: ../../.env
+    dest: /tmp/.env
