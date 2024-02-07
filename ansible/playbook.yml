@@ -5,9 +5,9 @@
   roles:
     #- roles/docker
     #- roles/network
-    - roles/env
-    - roles/app-database
-    - roles/app-back
-    - roles/app-front
-    - roles/proxy
+    - env
+    - app-database
+    - app-back
+    - app-front
+    - proxy
 
