@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-    backend:
+    back:
         container_name: back
         build: BackendAPI/simple-api-student
         networks:
@@ -9,7 +9,7 @@ services:
         depends_on:
           - database
         env_file:
-          - database.env
+          - .env
   
     database:
         container_name: database
@@ -17,12 +17,12 @@ services:
         networks:
           - my-network
         env_file:
-          - database.env
+          - .env
         volumes:
           - data:/var/lib/postgresql/data
 
     httpd:
-        container_name: front
+        container_name: proxy
         build: Front
         ports:
           - 80:80
@@ -30,7 +30,7 @@ services:
         networks:
           - my-network
         depends_on:
-          - backend
+          - back
 
     www:
         container_name: www
@@ -38,7 +38,7 @@ services:
         networks:
           - my-network
         depends_on:
-          - backend
+          - back
 
 networks:
     my-network:
