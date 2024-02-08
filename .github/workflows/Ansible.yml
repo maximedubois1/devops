@@ -9,7 +9,7 @@ on:
 jobs:
   ansible-deploy:
     runs-on: ubuntu-22.04
-    #if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2.5.0
