@@ -24,9 +24,9 @@ jobs:
           java-version: '17'
 
      #finally build your app with the latest command
-      #- name: Build and test with Maven
-      #  run: |
-      #    mvn clean verify
-      #    mvn -B verify sonar:sonar -Dsonar.projectKey=maximedubois1_simple-api -Dsonar.organization=maximedubois1 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}  --file ./pom.xml
-      #  working-directory: ${{env.working-directory}}
+      - name: Build and test with Maven
+        run: |
+          mvn clean verify
+          mvn -B verify sonar:sonar -Dsonar.projectKey=maximedubois1_simple-api -Dsonar.organization=maximedubois1 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}  --file ./pom.xml
+        working-directory: ${{env.working-directory}}
 
