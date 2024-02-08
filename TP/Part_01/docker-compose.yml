@@ -8,8 +8,6 @@ services:
           - my-network
         depends_on:
           - database
-        ports:
-          - 8080:8080
         env_file:
           - database.env
   
@@ -28,6 +26,7 @@ services:
         build: Front
         ports:
           - 80:80
+          - 8080:8080
         networks:
           - my-network
         depends_on:
