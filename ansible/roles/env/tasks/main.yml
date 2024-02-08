@@ -3,4 +3,4 @@
 - name: Copier le fichier .env vers la machine cible
   ansible.builtin.copy:
     src: ../../.env
-    dest: /tmp/.env
+    dest: /home/centos/.env

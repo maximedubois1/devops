@@ -452,4 +452,37 @@ role front
 
 ```
 
+httpd.conf
+```
+Listen 8080
+[...]
+#pour le front :
+<VirtualHost *:80>
+ProxyPreserveHost On
+ProxyPass / http://www:80/
+ProxyPassReverse / http://www:80/
+</VirtualHost>
 
+#pour le back
+<VirtualHost *:8080>
+ProxyPreserveHost On
+ProxyPass / http://back:8080/
+ProxyPassReverse / http://back:8080/
+</VirtualHost>
+```
+
+```yml
+---
+# tasks file for roles/proxy
+- name: Create Proxy container
+  community.docker.docker_container:
+    name: httpd
+    image: maximedubois1cpe/proxy:latest
+    networks:
+      - name: app-network
+    ports:
+      - 80:80
+      - 8080:8080
+    recreate: true
+    pull: true
+```

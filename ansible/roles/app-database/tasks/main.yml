@@ -8,6 +8,4 @@
       - data:/var/lib/postgresql/data
     networks:
       - name: app-network
-    env_file: /tmp/.env
-    recreate: true
-    pull: true
+    env_file: /home/centos/.env

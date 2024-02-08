@@ -5,8 +5,8 @@
     ansible_user: "centos"
 
   roles:
-    #- roles/docker
-    #- roles/network
+    - roles/docker
+    - roles/network
     - env
     - app-database
     - app-back
